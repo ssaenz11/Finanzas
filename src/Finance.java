@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -78,29 +79,54 @@ public class Finance {
 			hrefs.add("https://play.google.com/" +element.attr("href").toString());
 		}
 
-		String nombre = null;
-		String numeroRatings = null;
-		String ratingPromedio = null;
-		String cambiosRecientes = null;
-		String descripcion = null;
-		String apk= null;
+		String nombre, numeroRatings, ratings5, ratings4,
+		ratings3, ratings2, ratings1, ratingPromedio, cambiosRecientes, descripcion, apk = null;
 
+		double ratingPromedio2 = 0;
+
+		int numeroRatings2, ratings5Estrellas, ratings4Estrellas, ratings3Estrellas, ratings2Estrellas, ratings1Estrellas = 0; 
 
 		for(String url: hrefs) {
 			try {
 
 
 				detailDoc = Jsoup.connect(url).timeout(0).get();
-
-				numeroRatings= "0";
 				nombre= detailDoc.select("[class=\"id-app-title\"]").text();
-				double numeroRatings2 =Double.parseDouble(numeroRatings);
-				ratingPromedio= "0";
-				double ratingPromedio2 = Double.parseDouble(ratingPromedio);
+
+				ratings5 = detailDoc.select("[class=\"rating-bar-container five\"]").select("[class=\"bar-number\"]").text().replace(",", "");				
+				if(ratings5.equals(""))ratings5 = "-1";
+				ratings5Estrellas = Integer.parseInt(ratings5);				
+
+				ratings4 = detailDoc.select("[class=\"rating-bar-container four\"]").select("[class=\"bar-number\"]").text().replace(",", "");				
+				if(ratings4.equals(""))ratings4 = "-1";
+				ratings4Estrellas = Integer.parseInt(ratings5);				
+
+				ratings3 = detailDoc.select("[class=\"rating-bar-container three\"]").select("[class=\"bar-number\"]").text().replace(",", "");				
+				if(ratings3.equals(""))ratings3 = "-1";
+				ratings3Estrellas = Integer.parseInt(ratings5);				
+
+				ratings2 = detailDoc.select("[class=\"rating-bar-container two\"]").select("[class=\"bar-number\"]").text().replace(",", "");				
+				if(ratings2.equals(""))ratings2 = "-1";
+				ratings2Estrellas = Integer.parseInt(ratings5);				
+
+				ratings1 = detailDoc.select("[class=\"rating-bar-container one\"]").select("[class=\"bar-number\"]").text().replace(",", "");				
+				if(ratings1.equals(""))ratings1 = "-1";
+				ratings1Estrellas = Integer.parseInt(ratings5);				
+
+				numeroRatings = detailDoc.select("[class=\"reviews-num\"]").text().replace(",", "");;
+				if(numeroRatings.equals(""))numeroRatings = "-1";
+				numeroRatings2 = Integer.parseInt(numeroRatings);
+
+				ratingPromedio= detailDoc.select("[class=\"score\"]").text().replace(",", ".");
+				if(ratingPromedio.equals(""))ratingPromedio = "-1";
+				ratingPromedio2 = Double.parseDouble(ratingPromedio);
+
 				descripcion= detailDoc.select("[class=\"description\"]").text();
-				cambiosRecientes= detailDoc.select("[class=\"recent-change\"]").text();
-				apk= detailDoc.select("[data-docid]").attr("data-docid");
-				App app = new App(contador, nombre, numeroRatings2, ratingPromedio2, descripcion, cambiosRecientes, apk);
+				cambiosRecientes = detailDoc.select("[class=\"recent-change\"]").text();
+				apk = detailDoc.select("[data-docid]").attr("data-docid");
+
+				App app = new App(contador, nombre, numeroRatings2, ratingPromedio2, descripcion, cambiosRecientes, apk, 
+						ratings5Estrellas, ratings4Estrellas, ratings3Estrellas, ratings2Estrellas, ratings1Estrellas);
 				contador++;
 
 				listaApps.add(app);
@@ -125,13 +151,16 @@ public class Finance {
 		}
 	}
 	public void darInfoApp(int i) {
+		App p = listaApps.get(i);
 		System.out.println("--------------------------------------------------------------------------");
-		System.out.println(listaApps.get(i).getId()+ ". " +listaApps.get(i).getNombre());
-		System.out.println("Nï¿½mero de ratings : "+listaApps.get(i).getNumeroRatings() );
-		System.out.println("Rating promedio : " +listaApps.get(i).getRatingPromedio());
-		System.out.println("Descripcion : "+ listaApps.get(i).getDescripcion());
-		System.out.println("Camcios recientes : "+ listaApps.get(i).getCambiosRecientes());
-		System.out.println("APK: "+ listaApps.get(i).getApk());
+		System.out.println(p.getId()+ ". " +p.getNombre());
+		System.out.println("Número de ratings : "+p.getNumeroRatings() );
+		System.out.println("Estrellas - Cinco : "+p.getRatings5Estrellas() + " Cuatro : " + 
+				p.getRatings4Estrellas() + " Tres : " + p.getRatings3Estrellas() + " Dos : " + p.getRatings2Estrellas() + " Una : " + p.getRatings1Estrellas());
+		System.out.println("Rating promedio : " +p.getRatingPromedio());
+		System.out.println("Descripcion : "+ p.getDescripcion());
+		System.out.println("Cambios recientes : "+ p.getCambiosRecientes());
+		System.out.println("APK: "+ p.getApk());
 		System.out.println("--------------------------------------------------------------------------");
 	}
 
@@ -143,33 +172,38 @@ public class Finance {
 
 		Finance finance = new Finance();
 
-		System.out.println("Quï¿½ informaciï¿½n desea de la PlayStore , Categorï¿½a Finanzas");
-		System.out.println("1. Lista de las aplicaciones con toda su informaciï¿½n(escriba 1)");
-
-
 		Scanner reader = new Scanner(System.in);
-		int n = reader.nextInt(); // Scans the next token of the input as an int.
-		//once finished
+
+		int n, x ;
+
+		while(true) {		
+			System.out.println("Que información desea de la PlayStore , Categoria Finanzas");
+			System.out.println("1. Lista de las aplicaciones con toda su información (Escriba 1)");
+			System.out.println("2. Dar info de una aplicación (Escriba 2)");
+			System.out.println("3. Finalizar (Escriba 3)");
 
 
-		if (n == 1) {
-			finance.darInfoPlayStore();
-			System.out.println("2. Dar info de una aplicaciï¿½n(escriba el id de la apliciaciï¿½n)");
-			Scanner reader1 = new Scanner(System.in);
-			int x = reader1.nextInt(); // Scans the next token of the input as an int.
-			//once finished
-			reader.close(); 
-			finance.darInfoApp(x);
+			try {
 
+				n = reader.nextInt(); // Scans the next token of the input as an int.
+				if(n == 1)finance.darInfoPlayStore();
+				else if(n == 2) {
+					System.out.println("Ingrese el ID en la lista de la aplicación (Escriba el id de la aplicación)");
+					x = reader.nextInt();
+					finance.darInfoApp(x);
+					System.out.println("Escriba cualquier cosa para continuar");
+					reader.next();
+				}else if(n == 3) {
+					break;
+				}else {
+				}
+
+			}catch(InputMismatchException e) {
+				System.out.println("Opción Incorrecta :  Escriba cualquier cosa para continuar");
+				reader.next();
+			}
 		}
-
-
-
-
-
-
-
-
+		reader.close();
 	}
 
 }

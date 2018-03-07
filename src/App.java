@@ -3,11 +3,12 @@ public class App {
 	
 	
 	private String apk;
+	
 	private int id;
 	
 	private String nombre;
 	
-	private double numeroRatings;
+	private int numeroRatings;
 	
 	private double ratingPromedio;
 	
@@ -15,8 +16,19 @@ public class App {
 	
 	private String CambiosRecientes;
 	
-	public App(int id2, String nombre2, double numeroRatings2, double ratingPromedio2
-			, String descripcion2, String cambiosRecientes2, String apk2) {
+	private int ratings5Estrellas;
+	
+	private int ratings4Estrellas;
+	
+	private int ratings3Estrellas;
+	
+	private int ratings2Estrellas;
+	
+	private int ratings1Estrellas;
+	
+	public App(int id2, String nombre2, int numeroRatings2, double ratingPromedio2
+			, String descripcion2, String cambiosRecientes2, String apk2
+			, int estrellas5, int estrellas4, int estrellas3, int estrellas2, int estrellas1) {
 		
 		id = id2;
 		nombre = nombre2;
@@ -25,9 +37,56 @@ public class App {
 		descripcion = descripcion2;
 		CambiosRecientes = cambiosRecientes2; 
 		apk = apk2;
+		ratings1Estrellas = estrellas1;
+		ratings2Estrellas = estrellas2;
+		ratings3Estrellas = estrellas3;
+		ratings4Estrellas = estrellas4;
+		ratings5Estrellas = estrellas5;
 		
-		
-		
+	}
+
+	public int getRatings5Estrellas() {
+		return ratings5Estrellas;
+	}
+
+	public void setRatings5Estrellas(int ratings5Estrellas) {
+		this.ratings5Estrellas = ratings5Estrellas;
+	}
+
+	public int getRatings4Estrellas() {
+		return ratings4Estrellas;
+	}
+
+	public void setRatings4Estrellas(int ratings4Estrellas) {
+		this.ratings4Estrellas = ratings4Estrellas;
+	}
+
+	public int getRatings3Estrellas() {
+		return ratings3Estrellas;
+	}
+
+	public void setRatings3Estrellas(int ratings3Estrellas) {
+		this.ratings3Estrellas = ratings3Estrellas;
+	}
+
+	public int getRatings2Estrellas() {
+		return ratings2Estrellas;
+	}
+
+	public void setRatings2Estrellas(int ratings2Estrellas) {
+		this.ratings2Estrellas = ratings2Estrellas;
+	}
+
+	public int getRatings1Estrellas() {
+		return ratings1Estrellas;
+	}
+
+	public void setRatings1Estrellas(int ratings1Estrellas) {
+		this.ratings1Estrellas = ratings1Estrellas;
+	}
+
+	public void setNumeroRatings(int numeroRatings) {
+		this.numeroRatings = numeroRatings;
 	}
 
 	public int getId() {
@@ -46,12 +105,8 @@ public class App {
 		this.nombre = nombre;
 	}
 
-	public double getNumeroRatings() {
+	public int getNumeroRatings() {
 		return numeroRatings;
-	}
-
-	public void setNumeroRatings(double numeroRatings) {
-		this.numeroRatings = numeroRatings;
 	}
 
 	public double getRatingPromedio() {
